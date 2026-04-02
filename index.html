@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investigación de Redes - ARO Systems</title>
+<style>
+    /* Estilos Globales Modernos */
+    :root {
+        --primary-color: #0b5d5d; /* Verde azulado oscuro */
+        --secondary-color: #007bff; /* Azul vibrante */
+        --bg-color: #f0f4f8; /* Gris azulado muy claro */
+        --sidebar-bg: #e1e8ed;
+        --text-color: #333;
+        --panel-bg: #ffffff;
+        --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        --transition: all 0.3s ease;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    /* Cabecera con Degradado */
+    header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #117a7a 100%);
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+        box-shadow: var(--shadow);
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 2.5em;
+        font-weight: 300;
+        letter-spacing: 1px;
+    }
+
+    header p {
+        margin: 10px 0 0;
+        font-size: 1.2em;
+        opacity: 0.9;
+    }
+
+    /* Contenedor Principal (Flexbox) */
+    .container {
+        display: flex;
+        flex: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 20px;
+    }
+
+    /* Barra de Navegación Lateral (Estilizada) */
+    nav {
+        width: 280px;
+        background-color: var(--sidebar-bg);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        margin-right: 20px;
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+    }
+
+    nav h3 {
+        color: var(--primary-color);
+        text-transform: uppercase;
+        font-size: 0.9em;
+        letter-spacing: 2px;
+        margin-bottom: 25px;
+        border-bottom: 2px solid var(--primary-color);
+        padding-bottom: 10px;
+    }
+
+    nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    nav li {
+        margin-bottom: 15px;
+    }
+
+    nav a {
+        color: var(--text-color);
+        text-decoration: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        font-size: 1.05em;
+        font-weight: 500;
+        transition: var(--transition);
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    nav a:hover {
+        background-color: var(--primary-color);
+        color: white;
+        transform: translateX(5px);
+    }
+
+    /* Iconos de Menú (Emojies) */
+    .menu-icon {
+        margin-right: 12px;
+        font-size: 1.3em;
+    }
+
+    /* Área de Contenido Principal (Tarjetas) */
+    main {
+        flex: 1;
+    }
+
+    section {
+        display: none;
+        background-color: var(--panel-bg);
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: var(--shadow);
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    section.active {
+        display: block;
+    }
+
+    h2 {
+        color: var(--primary-color);
+        border-bottom: 2px solid #e1e8ed;
+        padding-bottom: 15px;
+        margin-top: 0;
+        margin-bottom: 30px;
+        font-size: 2em;
+        font-weight: 600;
+    }
+
+    h3.sub-title {
+        color: #117a7a;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        font-size: 1.5em;
+        font-weight: 500;
+    }
+
+    p {
+        line-height: 1.8;
+        font-size: 1.1em;
+        margin-bottom: 20px;
+        color: #555;
+    }
+
+    /* Imágenes Estilizadas (Secciones y Perfil) */
+    img.topic-img {
+        max-width: 100%;
+        height: auto;
+        margin: 10px 0 30px 0; /* Espaciado modificado: poco arriba, más abajo */
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        display: block;
+        transition: var(--transition);
+    }
+
+    img.topic-img:hover {
+        transform: scale(1.02);
+    }
+
+    /* Listas con Iconos */
+    section ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 30px;
+    }
+
+    section li {
+        position: relative;
+        padding-left: 30px;
+        margin-bottom: 12px;
+        font-size: 1.05em;
+        color: #555;
+    }
+
+    section li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: var(--secondary-color);
+        font-weight: bold;
+    }
+
+    /* Sección de Perfil */
+    .perfil-card {
+        display: flex;
+        align-items: center;
+        background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        margin-top: 20px;
+        border: 1px solid #e1e8ed;
+    }
+
+    .perfil-img-container {
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 40px;
+        border: 6px solid white;
+        box-shadow: var(--shadow);
+    }
+
+    .perfil-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .perfil-info p {
+        margin: 10px 0;
+        font-size: 1.15em;
+    }
+
+    .perfil-info b {
+        color: var(--primary-color);
+        margin-right: 10px;
+    }
+
+    /* Pie de Página */
+    footer {
+        background-color: var(--primary-color);
+        color: white;
+        text-align: center;
+        padding: 20px;
+        margin-top: 40px;
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Adaptabilidad Móvil */
+    @media (max-width: 768px) {
+        .container { flex-direction: column; padding: 10px; }
+        nav { width: 100%; margin-right: 0; margin-bottom: 20px; position: relative; top: 0; padding: 20px; }
+        section { padding: 25px; }
+        h1 { font-size: 2em; }
+        .perfil-card { flex-direction: column; text-align: center; }
+        .perfil-img-container { margin-right: 0; margin-bottom: 20px; }
+    }
+</style>
+
+<script>
+    function mostrar(id){
+        // Ocultar todas las secciones
+        let secciones = document.querySelectorAll("section");
+        secciones.forEach(sec => sec.classList.remove("active"));
+        
+        // Mostrar la sección seleccionada
+        document.getElementById(id).classList.add("active");
+        
+        // Desplazarse al inicio del contenido
+        document.querySelector("main").scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</head>
+<body>
+
+<header>
+    <h1>Investigación sobre Redes</h1>
+    <p>ARO Systems · Soluciones Tecnológicas Integrales</p>
+</header>
+
+<div class="container">
+
+<nav>
+    <h3>TEMAS</h3>
+    <ul>
+        <li><a onclick="mostrar('intro')"><span class="menu-icon">🌐</span>Introducción</a></li>
+        <li><a onclick="mostrar('osi')"><span class="menu-icon">📊</span>Modelo OSI y TCP/IP</a></li>
+        <li><a onclick="mostrar('protocolos')"><span class="menu-icon">📜</span>Protocolos</a></li>
+        <li><a onclick="mostrar('topologias')"><span class="menu-icon">🕸️</span>Topologías</a></li>
+        <li><a onclick="mostrar('software')"><span class="menu-icon">💻</span>Software y Simuladores</a></li>
+        <li><a onclick="mostrar('dispositivos')"><span class="menu-icon">📡</span>Dispositivos</a></li>
+        <li><a onclick="mostrar('cableado')"><span class="menu-icon">🔌</span>Cableado UTP</a></li>
+        <li><a onclick="mostrar('perfil')"><span class="menu-icon">👤</span>Información Personal</a></li>
+    </ul>
+</nav>
+
+<main>
+
+<section id="intro" class="active">
+    <h2>Introducción a las Redes</h2>
+    
+    <h3 class="sub-title">¿Qué son las redes de computadoras?</h3>
+    <p>
+        Las redes de computadoras son sistemas fundamentales de comunicación que permiten la interconexión de múltiples dispositivos (como ordenadores, servidores, y dispositivos inteligentes) con el fin primordial de compartir información, recursos y servicios.
+    </p>
+    <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Visualización de una red global de datos">
+
+    <h3 class="sub-title">Importancia en el mundo moderno</h3>
+    <p>
+        Gracias a las redes, hoy es posible enviar mensajes instantáneos, realizar videollamadas, acceder a grandes volúmenes de información en tiempo real y trabajar de forma colaborativa desde cualquier lugar del mundo. Son la columna vertebral de la sociedad de la información.
+    </p>
+    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Personas colaborando digitalmente">
+</section>
+
+<section id="osi">
+    <h2>Modelos de Referencia: OSI y TCP/IP</h2>
+    
+    <h3 class="sub-title">El Modelo OSI (7 Capas)</h3>
+    <p>
+        <b>El modelo OSI (Open Systems Interconnection)</b> es un estándar de 7 capas que ayuda a entender el proceso de comunicación desde el hardware físico hasta la aplicación del usuario. Provee una estructura teórica para la interoperabilidad.
+    </p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3b/Osi-model-jb.svg" class="topic-img" alt="Diagrama del Modelo OSI">
+
+    <h3 class="sub-title">El Modelo TCP/IP (4 Capas)</h3>
+    <p>
+        Por otro lado, <b>el modelo TCP/IP</b> es el protocolo pragmático utilizado en Internet, simplificando el proceso en 4 capas clave. Es el modelo funcional que hace posible la red global actual.
+    </p>
+    <img src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Abstracto de flujo de datos en capas">
+</section>
+
+<section id="protocolos">
+    <h2>Protocolos de Comunicación</h2>
+    
+    <h3 class="sub-title">¿Qué es un protocolo?</h3>
+    <p>
+        Los protocolos son el "lenguaje" de la red. Son conjuntos de reglas y estándares que permiten que dispositivos heterogéneos se comuniquen correctamente. Sin ellos, el intercambio de datos sería caótico.
+    </p>
+    <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Tecnología de comunicación y datos">
+
+    <h3 class="sub-title">Protocolos Fundamentales</h3>
+    <p>
+        Algunos protocolos esenciales que utilizamos diariamente son:
+    </p>
+    <ul>
+        <li><b>HTTP:</b> Para la navegación web.</li>
+        <li><b>IP:</b> Para el direccionamiento y enrutamiento.</li>
+        <li><b>TCP:</b> Para asegurar transmisiones fiables.</li>
+        <li><b>DNS:</b> Para traducir nombres de dominio.</li>
+    </ul>
+    <img src="https://images.unsplash.com/photo-1484417824246-34ac1e0f6c2c?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Código y estructura web">
+</section>
+
+<section id="topologias">
+    <h2>Topologías de Red</h2>
+    
+    <h3 class="sub-title">Disposición Física y Lógica</h3>
+    <p>
+        La topología de red define la disposición física o lógica de los dispositivos y sus conexiones. La elección de la topología afecta la escalabilidad, el coste y la facilidad de administración.
+    </p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/97/NetworkTopologies.svg" class="topic-img" alt="Diagramas de topologías comunes">
+
+    <h3 class="sub-title">Topologías Comunes y Características</h3>
+    <p>
+        Diferentes tipos de topologías y sus usos:
+    </p>
+    <ul>
+        <li><b>Estrella:</b> (Común) Centralizada en un switch. Fácil de diagnosticar.</li>
+        <li><b>Malla:</b> (Reliable) Redundante. Alta fiabilidad, pero costosa.</li>
+        <li><b>Bus:</b> (Simple) Un solo cable troncal.</li>
+    </ul>
+    <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Diagrama abstracto de conexiones de red">
+</section>
+
+<section id="software">
+    <h2>Software de Red y Simuladores</h2>
+    
+    <h3 class="sub-title">Software de Administración y Monitoreo</h3>
+    <p>
+        El software de red es crucial para la administración, monitoreo y seguridad. Incluye desde los sistemas operativos de red hasta herramientas de diagnóstico de tráfico y gestión de seguridad.
+    </p>
+    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Pantalla mostrando gráficos de datos y monitoreo">
+
+    <h3 class="sub-title">Simuladores como Herramientas Educativas</h3>
+    <p>
+        <b>Simuladores como Cisco Packet Tracer:</b> Son herramientas educativas potentes que permiten a estudiantes y profesionales diseñar, configurar y solucionar problemas de redes en un entorno virtual seguro, sin necesidad de hardware físico costoso.
+    </p>
+    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Persona programando o simulando redes en PC">
+</section>
+
+<section id="dispositivos">
+    <h2>Dispositivos de Red Esenciales</h2>
+    
+    <h3 class="sub-title">Hardware de Interconexión</h3>
+    <p>
+        Para construir una red funcional, se requieren dispositivos de hardware que gestionen el flujo de datos y conecten los hosts de manera eficiente.
+    </p>
+    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc51?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Un rack de servidores con luces LED">
+
+    <h3 class="sub-title">Principales Componentes y Funciones</h3>
+    <ul>
+        <li><b>Router:</b> Conecta redes distintas y determina la mejor ruta.</li>
+        <li><b>Switch:</b> Conecta dispositivos dentro de una misma LAN (inteligente).</li>
+        <li><b>Access Point:</b> Permite la conexión inalámbrica Wi-Fi.</li>
+    </ul>
+    <img src="https://images.unsplash.com/photo-1544890225-2f3faec4cd60?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Dispositivos de red domésticos o de oficina">
+</section>
+
+<section id="cableado">
+    <h2>Cableado UTP y Códigos de Colores</h2>
+    
+    <h3 class="sub-title">El Medio Físico Estándar</h3>
+    <p>
+        El cable UTP (Unshielded Twisted Pair) es el estándar físico más utilizado para redes LAN cableadas. Su rendimiento depende de una terminación correcta y precisa en los conectores RJ-45.
+    </p>
+    <img src="https://images.unsplash.com/photo-1629618195886-f4f9f44a377d?q=80&w=1200&auto=format&fit=crop" class="topic-img" alt="Conector RJ-45 y cables de colores">
+
+    <h3 class="sub-title">Los Estándares T568A y T568B</h3>
+    <p>
+        Los estándares T568A y T568B definen el orden preciso de los 8 hilos de colores para garantizar la compatibilidad y el rendimiento. El orden T568B es el más extendido universalmente.
+    </p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/RJ-45_T568B.svg" class="topic-img" style="max-width:400px; margin-left:auto; margin-right:auto;" alt="Diagrama de cableado T568B">
+</section>
+
+<section id="perfil">
+    <h2>Información del Estudiante</h2>
+    <div class="perfil-card">
+        <div class="perfil-img-container">
+            <img src="image_0.png" alt="Foto de perfil de Diego Armando">
+        </div>
+        <div class="perfil-info">
+            <p><b>Nombre:</b> Diego Armando</p>
+            <p><b>Curso:</b> Fundamentos de Redes de Computadoras</p>
+            <p><b>Institución:</b> U.B.I. (Universidad Boliviana Internacional)</p>
+            <p><b>Año:</b> 2026</p>
+        </div>
+    </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+    <p>ARO Systems © 2026 · Proyecto de Investigación Estudiantil</p>
+</footer>
+
+</body>
+</html>
